@@ -7,13 +7,36 @@ using System.Web.Mvc;
 
 namespace RestaurantRater.Controllers
 {
-    public class RestaurantController : Controller
-    {
+      public class RestaurantController : Controller
+      {
             private RestaurantDbContext _db = new RestaurantDbContext();
-        // GET: Restaurant
-        public ActionResult Index()
-        {
-            return View(_db.Restaurants.ToList());
-        }
-    }
+            // GET: Restaurant
+            public ActionResult Index()
+            {
+                  return View(_db.Restaurants.ToList());
+            }
+
+            //Get: Restaurant/Create
+            //[HttpGet]
+            public ActionResult Create()
+            {
+                  return View();
+            }
+
+
+            //Post: Restaurant/Create 
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public ActionResult Create(Restaurant restaurant)
+            {
+                  if (ModelState.IsValid)
+                  {
+                        _db.Restaurants.Add(restaurant);
+                        _db.SaveChanges();
+                        return RedirectToAction("Index");
+                  }
+
+                  return View(restaurant);
+            }
+      }
 }
